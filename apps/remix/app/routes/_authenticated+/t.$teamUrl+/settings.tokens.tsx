@@ -91,7 +91,7 @@ export default function ApiTokensPage() {
             Create and manage API tokens. See our{' '}
             <a
               className="text-primary underline"
-              href={'https://docs.documenso.com/developers/public-api'}
+              href={'https://docs.0xmetalabs.com/developers/public-api'}
               target="_blank"
               rel="noopener"
             >
