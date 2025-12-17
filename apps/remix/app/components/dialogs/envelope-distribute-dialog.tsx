@@ -328,7 +328,7 @@ export const EnvelopeDistributeDialog = ({
                                             </SelectItem>
                                           ))}
 
-                                          <SelectItem value={'-1'}>Documenso</SelectItem>
+                                          <SelectItem value={'-1'}>0xDocHub</SelectItem>
                                         </SelectContent>
                                       </Select>
                                     </FormControl>

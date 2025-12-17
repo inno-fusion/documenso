@@ -86,7 +86,7 @@ export const AppNavMobile = ({ isMenuOpen, onMenuOpenChange }: AppNavMobileProps
         <Link to="/" onClick={handleMenuItemClick}>
           <img
             src={LogoImage}
-            alt="Documenso Logo"
+            alt="0xMetaLabs Logo"
             className="dark:invert"
             width={170}
             height={25}
@@ -123,8 +123,8 @@ export const AppNavMobile = ({ isMenuOpen, onMenuOpenChange }: AppNavMobileProps
             <ThemeSwitcher />
           </div>
 
-          <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Documenso, Inc.
+          <p className="text-muted-foreground text-sm">
+            © {new Date().getFullYear()} 0xMetaLabs, Inc.
             <br />
             <Trans>All rights reserved.</Trans>
           </p>
