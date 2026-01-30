@@ -60,8 +60,8 @@ export const TemplateDocumentSelfSigned = ({ documentName, assetBaseUrl }: Templ
           </Button>
 
           <Button
-            className="rounded-lg border border-slate-200 border-solid px-4 py-2 text-center font-medium text-black text-sm no-underline"
-            href="https://documenso.com/pricing"
+            className="rounded-lg border border-solid border-slate-200 px-4 py-2 text-center text-sm font-medium text-black no-underline"
+            href="https://dochub.ngx.0xmetalabs.com/pricing"
           >
             <Img src={getAssetUrl('/static/review.png')} className="mr-2 mb-0.5 inline h-5 w-5 align-middle" />
             <Trans>View plans</Trans>
