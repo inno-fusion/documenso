@@ -241,7 +241,7 @@ export const AddSubjectFormPartial = ({
                                     </SelectItem>
                                   ))}
 
-                                  <SelectItem value={'-1'}>Documenso</SelectItem>
+                                  <SelectItem value={'-1'}>0xMetaLabs</SelectItem>
                                 </SelectContent>
                               </Select>
                             </FormControl>
