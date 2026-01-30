@@ -9,7 +9,7 @@ import { ZOrganisationNameSchema } from '@documenso/trpc/server/organisation-rou
  */
 export const ZClaimFlagsSchema = z.object({
   /**
-   * Allows disabling of Documenso branding for:
+   * Allows disabling of 0xMetaLabs branding for:
    * - Certificates
    * - Emails
    * - Other?
@@ -55,7 +55,7 @@ export const SUBSCRIPTION_CLAIM_FEATURE_FLAGS: Record<
   },
   hidePoweredBy: {
     key: 'hidePoweredBy',
-    label: 'Hide Documenso branding by',
+    label: 'Hide 0xMetaLabs branding by',
   },
   emailDomains: {
     key: 'emailDomains',
