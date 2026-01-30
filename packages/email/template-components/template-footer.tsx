@@ -17,7 +17,7 @@ export const TemplateFooter = ({ isDocument = true }: TemplateFooterProps) => {
           <Trans>
             This document was sent using{' '}
             <Link className="text-[#7AC455]" href="https://documen.so/mail-footer">
-              Documenso
+              0xDocHub by 0xMetaLabs.
             </Link>
             .
           </Trans>
@@ -39,9 +39,9 @@ export const TemplateFooter = ({ isDocument = true }: TemplateFooterProps) => {
 
       {!branding.brandingEnabled && (
         <Text className="my-8 text-sm text-slate-400">
-          Documenso, Inc.
+          0xMetaLabs, Inc.
           <br />
-          2261 Market Street, #5211, San Francisco, CA 94114, USA
+          INDIA - UAE - USA
         </Text>
       )}
     </Section>

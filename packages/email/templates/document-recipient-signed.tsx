@@ -16,7 +16,7 @@ export interface DocumentRecipientSignedEmailTemplateProps {
 export const DocumentRecipientSignedEmailTemplate = ({
   documentName = 'Open Source Pledge.pdf',
   recipientName = 'John Doe',
-  recipientEmail = 'lucas@documenso.com',
+  recipientEmail = 'lucas@0xmetalabs.com',
   assetBaseUrl = 'http://localhost:3002',
 }: DocumentRecipientSignedEmailTemplateProps) => {
   const { _ } = useLingui();
@@ -44,7 +44,7 @@ export const DocumentRecipientSignedEmailTemplate = ({
               ) : (
                 <Img
                   src={getAssetUrl('/static/logo.png')}
-                  alt="Documenso Logo"
+                  alt="0xMetaLabs Logo"
                   className="mb-4 h-6"
                 />
               )}
