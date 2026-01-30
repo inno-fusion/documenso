@@ -18,14 +18,14 @@ export type ConfirmTeamEmailProps = {
 
 export const ConfirmTeamEmailTemplate = ({
   assetBaseUrl = 'http://localhost:3002',
-  baseUrl = 'https://documenso.com',
+  baseUrl = 'https://dochub.ngx.0xmetalabs.com',
   teamName = 'Team Name',
   teamUrl = 'demo',
   token = '',
 }: ConfirmTeamEmailProps) => {
   const { _ } = useLingui();
 
-  const previewText = msg`Accept team email request for ${teamName} on Documenso`;
+  const previewText = msg`Accept team email request for ${teamName} on 0xMetaLabs`;
 
   return (
     <Html>
@@ -48,8 +48,8 @@ export const ConfirmTeamEmailTemplate = ({
 
               <Text className="text-center text-base">
                 <Trans>
-                  <span className="font-bold">{teamName}</span> has requested to use your email address for their team
-                  on Documenso.
+                  <span className="font-bold">{teamName}</span> has requested to use your email
+                  address for their team on 0xMetaLabs.
                 </Trans>
               </Text>
 
@@ -78,7 +78,7 @@ export const ConfirmTeamEmailTemplate = ({
 
                 <Text className="mt-2 text-sm">
                   <Trans>
-                    You can revoke access at any time in your team settings on Documenso{' '}
+                    You can revoke access at any time in your team settings on 0xMetaLabs{' '}
                     <Link href={`${baseUrl}/settings/teams`}>here</Link>.
                   </Trans>
                 </Text>

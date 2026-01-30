@@ -1,7 +1,7 @@
--- Create deleted@documenso.com
+-- Create deleted@0xmetalabs.com
 DO $$
-BEGIN  
-  IF NOT EXISTS (SELECT 1 FROM "public"."User" WHERE "email" = 'deleted-account@documenso.com') THEN  
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM "public"."User" WHERE "email" = 'deleted-account@0xmetalabs.com') THEN
     INSERT INTO
       "public"."User" (
         "email",
@@ -16,7 +16,7 @@ BEGIN
       )
     VALUES
       (
-        'deleted-account@documenso.com',
+        'deleted-account@0xmetalabs.com',
         NOW(),
         NULL,
         NOW(),
@@ -26,5 +26,5 @@ BEGIN
         CAST('GOOGLE'::TEXT AS "public"."IdentityProvider"),
         FALSE
       );
-  END IF;  
+  END IF;
 END $$
