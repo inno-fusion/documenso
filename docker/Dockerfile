@@ -3,6 +3,8 @@
 ###########################
 FROM node:24-alpine3.23 AS base
 
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+
 RUN apk add --no-cache openssl
 RUN apk add --no-cache font-freefont
 
@@ -111,8 +113,6 @@ ENV NEXT_PRIVATE_TELEMETRY_HOST="$NEXT_PRIVATE_TELEMETRY_HOST"
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nodejs
 
-USER nodejs
-
 WORKDIR /app
 
 COPY --from=builder --chown=nodejs:nodejs /app/out/json/ .
@@ -145,6 +145,8 @@ COPY --from=installer --chown=nodejs:nodejs /app/packages/prisma/migrations ./pa
 RUN npx prisma generate --schema ./packages/prisma/schema.prisma --generator client \
     && npm cache clean --force
 
+RUN chown -R nodejs:nodejs /app
+USER nodejs
 
 # Get the start script from docker/
 COPY --chown=nodejs:nodejs ./docker/start.sh /app/apps/remix/start.sh
