@@ -3,7 +3,9 @@
 ###########################
 FROM node:22-alpine3.22 AS base
 
-ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+ENV CYPRESS_INSTALL_BINARY=0
 
 RUN apk add --no-cache openssl
 RUN apk add --no-cache font-freefont
