@@ -1,8 +1,8 @@
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 
-import { Body, Container, Head, Hr, Html, Preview, Section } from '../components';
-import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
+import { Body, Container, Head, Hr, Html, Img, Preview, Section } from '../components';
+import { useBranding } from '../providers/branding';
 import { TemplateFooter } from '../template-components/template-footer';
 import type { TemplateRecipientExpiredProps } from '../template-components/template-recipient-expired';
 import { TemplateRecipientExpired } from '../template-components/template-recipient-expired';
@@ -13,24 +13,32 @@ export const RecipientExpiredTemplate = ({
   documentName = 'Open Source Pledge.pdf',
   recipientName = 'John Doe',
   recipientEmail = 'john@example.com',
-  documentLink = 'https://documenso.com',
+  documentLink = 'https://dochub.ngx.0xmetalabs.com',
   assetBaseUrl = 'http://localhost:3002',
 }: RecipientExpiredEmailTemplateProps) => {
   const { _ } = useLingui();
+  const branding = useBranding();
 
   const previewText = msg`The signing window for "${recipientName}" on document "${documentName}" has expired.`;
+
+  const getAssetUrl = (path: string) => {
+    return new URL(path, assetBaseUrl).toString();
+  };
 
   return (
     <Html>
       <Head />
+      <Preview>{_(previewText)}</Preview>
 
-      <Body className="mx-auto my-auto bg-background font-sans">
-        <Preview>{_(previewText)}</Preview>
-
+      <Body className="mx-auto my-auto bg-white font-sans">
         <Section>
-          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid p-4 backdrop-blur-sm">
+          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-slate-200 border-solid p-4 backdrop-blur-sm">
             <Section>
-              <TemplateBrandingLogo assetBaseUrl={assetBaseUrl} className="mb-4 h-6" />
+              {branding.brandingEnabled && branding.brandingLogo ? (
+                <Img src={branding.brandingLogo} alt="Branding Logo" className="mb-4 h-6" />
+              ) : (
+                <Img src={getAssetUrl('/static/logo.png')} alt="0xMetaLabs Logo" className="mb-4 h-6" />
+              )}
 
               <TemplateRecipientExpired
                 documentName={documentName}

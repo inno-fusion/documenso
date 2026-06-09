@@ -3,8 +3,8 @@ import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { RecipientRole } from '@prisma/client';
 
-import { Body, Container, Head, Hr, Html, Preview, Section, Text } from '../components';
-import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
+import { Body, Container, Head, Hr, Html, Img, Preview, Section, Text } from '../components';
+import { useBranding } from '../providers/branding';
 import { TemplateCustomMessageBody } from '../template-components/template-custom-message-body';
 import { TemplateDocumentReminder } from '../template-components/template-document-reminder';
 import { TemplateFooter } from '../template-components/template-footer';
@@ -16,35 +16,41 @@ export type DocumentReminderEmailTemplateProps = {
   assetBaseUrl?: string;
   customBody?: string;
   role: RecipientRole;
-  reportUrl?: string;
 };
 
 export const DocumentReminderEmailTemplate = ({
   recipientName = 'John Doe',
   documentName = 'Open Source Pledge.pdf',
-  signDocumentLink = 'https://documenso.com',
+  signDocumentLink = 'https://dochub.ngx.0xmetalabs.com',
   assetBaseUrl = 'http://localhost:3002',
   customBody,
   role = RecipientRole.SIGNER,
-  reportUrl,
 }: DocumentReminderEmailTemplateProps) => {
   const { _ } = useLingui();
+  const branding = useBranding();
 
   const action = _(RECIPIENT_ROLES_DESCRIPTION[role].actionVerb).toLowerCase();
 
   const previewText = msg`Reminder to ${action} ${documentName}`;
 
+  const getAssetUrl = (path: string) => {
+    return new URL(path, assetBaseUrl).toString();
+  };
+
   return (
     <Html>
       <Head />
+      <Preview>{_(previewText)}</Preview>
 
-      <Body className="mx-auto my-auto bg-background font-sans">
-        <Preview>{_(previewText)}</Preview>
-
+      <Body className="mx-auto my-auto bg-white font-sans">
         <Section>
-          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid p-4 backdrop-blur-sm">
+          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-slate-200 border-solid p-4 backdrop-blur-sm">
             <Section>
-              <TemplateBrandingLogo assetBaseUrl={assetBaseUrl} className="mb-4 h-6" />
+              {branding.brandingEnabled && branding.brandingLogo ? (
+                <Img src={branding.brandingLogo} alt="Branding Logo" className="mb-4 h-6" />
+              ) : (
+                <Img src={getAssetUrl('/static/logo.png')} alt="0xMetaLabs Logo" className="mb-4 h-6" />
+              )}
 
               <TemplateDocumentReminder
                 recipientName={recipientName}
@@ -59,7 +65,7 @@ export const DocumentReminderEmailTemplate = ({
           {customBody && (
             <Container className="mx-auto mt-12 max-w-xl">
               <Section>
-                <Text className="mt-2 text-base text-muted-foreground">
+                <Text className="mt-2 text-base text-slate-400">
                   <TemplateCustomMessageBody text={customBody} />
                 </Text>
               </Section>
@@ -69,7 +75,7 @@ export const DocumentReminderEmailTemplate = ({
           <Hr className="mx-auto mt-12 max-w-xl" />
 
           <Container className="mx-auto max-w-xl">
-            <TemplateFooter reportUrl={reportUrl} />
+            <TemplateFooter />
           </Container>
         </Section>
       </Body>
