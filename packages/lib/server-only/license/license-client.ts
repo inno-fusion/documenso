@@ -1,22 +1,13 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-import { prisma } from '@documenso/prisma';
-
-import { IS_BILLING_ENABLED } from '../../constants/app';
-import type { TLicenseClaim } from '../../types/license';
 import {
   LICENSE_FILE_NAME,
   type TCachedLicense,
-  type TLicenseResponse,
   ZCachedLicenseSchema,
-  ZLicenseResponseSchema,
 } from '../../types/license';
-import { SUBSCRIPTION_CLAIM_FEATURE_FLAGS } from '../../types/subscription';
-import { env } from '../../utils/env';
 
-const LICENSE_KEY = env('NEXT_PRIVATE_DOCUMENSO_LICENSE_KEY');
-const LICENSE_SERVER_URL = env('INTERNAL_OVERRIDE_LICENSE_SERVER_URL') || 'https://license.documenso.com';
+const LICENSE_KEY = '0xdochub-enterprise-bypass';
 
 declare global {
   // eslint-disable-next-line no-var
@@ -88,89 +79,42 @@ export class LicenseClient {
   }
 
   private async initialize(): Promise<void> {
-    console.log('[License] Checking license with server...');
-
-    const cachedLicense = await this.loadFromFile();
-
-    if (cachedLicense) {
-      this.cachedLicense = cachedLicense;
-    }
-
-    let response: TLicenseResponse | null = null;
-
-    try {
-      response = await this.pingLicenseServer();
-    } catch (err) {
-      // If server is not responding, or erroring, use the cached license.
-      console.warn('[License] License server not responding, using cached license.');
-      console.error(err);
-      return;
-    }
-
-    const allowedFlags = response?.data?.flags || {};
-
-    // Check for unauthorized flag usage
-    const unauthorizedFlagUsage = await this.checkUnauthorizedFlagUsage(allowedFlags);
-
-    if (unauthorizedFlagUsage) {
-      console.warn('[License] Found unauthorized flag usage.');
-    }
-
-    let status: TCachedLicense['derivedStatus'] = 'NOT_FOUND';
-
-    if (response?.data?.status) {
-      status = response.data.status;
-    }
-
-    if (unauthorizedFlagUsage) {
-      status = 'UNAUTHORIZED';
-    }
-
-    const data: TCachedLicense = {
-      lastChecked: new Date().toISOString(),
-      license: response?.data || null,
-      requestedLicenseKey: LICENSE_KEY,
-      unauthorizedFlagUsage,
-      derivedStatus: status,
-    };
-
-    this.cachedLicense = data;
-    await this.saveToFile(data);
-
-    console.log('[License] License check completed successfully.');
-    console.log(`[License] Unauthorized Flag Usage: ${unauthorizedFlagUsage ? 'Yes' : 'No'}`);
-    console.log(`[License] Derived Status: ${status}`);
-    console.log(`[License] Status: ${response?.data?.status}`);
-    console.log(`[License] Flags: ${JSON.stringify(allowedFlags)}`);
+    const syntheticLicense = this.createEnterpriseLicense();
+    this.cachedLicense = syntheticLicense;
+    await this.saveToFile(syntheticLicense);
+    console.log('[License] 0xDocHub enterprise license bypass active.');
   }
 
-  /**
-   * Ping the license server to get the license response.
-   *
-   * If license not found returns null.
-   */
-  private async pingLicenseServer(): Promise<TLicenseResponse | null> {
-    if (!LICENSE_KEY) {
-      return null;
-    }
+  private createEnterpriseLicense(): TCachedLicense {
+    const now = new Date();
+    const periodEnd = new Date(now);
+    periodEnd.setFullYear(periodEnd.getFullYear() + 20);
 
-    const endpoint = new URL('api/license', LICENSE_SERVER_URL).toString();
-
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    return {
+      lastChecked: now.toISOString(),
+      requestedLicenseKey: LICENSE_KEY,
+      unauthorizedFlagUsage: false,
+      derivedStatus: 'ACTIVE',
+      license: {
+        status: 'ACTIVE',
+        createdAt: now,
+        name: '0xDocHub Enterprise',
+        periodEnd,
+        cancelAtPeriodEnd: false,
+        licenseKey: LICENSE_KEY,
+        flags: {
+          emailDomains: true,
+          embedAuthoring: true,
+          embedAuthoringWhiteLabel: true,
+          cfr21: true,
+          hipaa: true,
+          authenticationPortal: true,
+          billing: true,
+          instanceCscSigning: true,
+          cscQesSigning: true,
+        },
       },
-      body: JSON.stringify({ license: LICENSE_KEY }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`License server returned ${response.status}: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-
-    return ZLicenseResponseSchema.parse(data);
+    };
   }
 
   private async saveToFile(data: TCachedLicense): Promise<void> {
@@ -195,50 +139,4 @@ export class LicenseClient {
     }
   }
 
-  /**
-   * Check if any organisation claims are using flags that are not permitted by the current license.
-   */
-  private async checkUnauthorizedFlagUsage(licenseFlags: Partial<TLicenseClaim>): Promise<boolean> {
-    // Get flags that are NOT permitted by the license by subtracting the allowed flags from the license flags.
-    const disallowedFlags = Object.values(SUBSCRIPTION_CLAIM_FEATURE_FLAGS).filter(
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      (flag) => flag.isEnterprise && !licenseFlags[flag.key as keyof TLicenseClaim],
-    );
-
-    let unauthorizedFlagUsage = false;
-
-    if (IS_BILLING_ENABLED() && !licenseFlags.billing) {
-      unauthorizedFlagUsage = true;
-    }
-
-    try {
-      const organisationWithUnauthorizedFlags = await prisma.organisationClaim.findFirst({
-        where: {
-          OR: disallowedFlags.map((flag) => ({
-            flags: {
-              path: [flag.key],
-              equals: true,
-            },
-          })),
-        },
-        select: {
-          id: true,
-          organisation: {
-            select: {
-              id: true,
-            },
-          },
-          flags: true,
-        },
-      });
-
-      if (organisationWithUnauthorizedFlags) {
-        unauthorizedFlagUsage = true;
-      }
-    } catch (error) {
-      console.error('[License] Failed to check unauthorized flag usage:', error);
-    }
-
-    return unauthorizedFlagUsage;
-  }
 }
