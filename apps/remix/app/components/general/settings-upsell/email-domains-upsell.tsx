@@ -23,7 +23,7 @@ const BRANDED_SENDERS = [
 ];
 
 /**
- * How long the initial unbranded (Documenso default) state is shown before
+ * How long the initial unbranded (0xDocHub default) state is shown before
  * the first flip starts. Shown exactly once — the cycle never returns to it.
  */
 const INITIAL_STATE_DURATION_MS = 2500;
@@ -46,7 +46,7 @@ export const EmailDomainsUpsell = () => {
 
   const isReducedMotion = useReducedMotion();
 
-  // Loop from index 1: the unbranded Documenso intro plays exactly once,
+  // Loop from index 1: the unbranded 0xDocHub intro plays exactly once,
   // then the cycle rotates through the branded senders only.
   const cycleIndex = useTimedCycle(EMAIL_CYCLE_DURATIONS_MS, 1);
 
@@ -147,7 +147,7 @@ export const EmailDomainsUpsell = () => {
                       transition={{ duration: 0.28, ease: EASE }}
                       className="flex min-w-0 items-center gap-1.5"
                     >
-                      <span className="min-w-0 truncate">{isBranded ? brandedSender.name : 'Documenso'}</span>
+                      <span className="min-w-0 truncate">{isBranded ? brandedSender.name : '0xDocHub'}</span>
 
                       {/* Inside the keyed row so it exits with the name and pops back in on every cycle step. */}
                       {isBranded && (
