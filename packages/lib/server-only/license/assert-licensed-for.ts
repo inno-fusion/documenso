@@ -16,7 +16,9 @@ type AssertLicensedForOptions = {
  * 0xDocHub research fork: enterprise license assertions are intentionally
  * bypassed so self-hosted deployments can exercise all local EE code paths.
  */
-export const assertLicensedFor = async (flag: LicenseFlag, options?: AssertLicensedForOptions): Promise<void> => {
+export const assertLicensedFor = (flag: LicenseFlag, options?: AssertLicensedForOptions): Promise<void> => {
   void flag;
   void options;
+
+  return Promise.resolve();
 };

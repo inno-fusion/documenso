@@ -1,11 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-import {
-  LICENSE_FILE_NAME,
-  type TCachedLicense,
-  ZCachedLicenseSchema,
-} from '../../types/license';
+import { LICENSE_FILE_NAME, type TCachedLicense, ZCachedLicenseSchema } from '../../types/license';
 
 const LICENSE_KEY = '0xdochub-enterprise-bypass';
 
@@ -138,5 +134,4 @@ export class LicenseClient {
       return null;
     }
   }
-
 }
