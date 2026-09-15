@@ -193,8 +193,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
               </li>
               <li>
                 <Trans>
-                  If you are using staging, ensure that you have set the host prop on the embedding component to the
-                  staging domain (https://stg-app.documenso.com)
+                  For staging, set the host prop on the embedding component to your staging 0xDocHub domain.
                 </Trans>
               </li>
             </ul>
