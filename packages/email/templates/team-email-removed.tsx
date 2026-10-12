@@ -30,7 +30,7 @@ export const TeamEmailRemovedTemplate = ({
   return (
     <Html>
       <Head />
-      <Body className="mx-auto my-auto font-sans">
+      <Body className="mx-auto my-auto font-sans text-foreground">
         <Preview>{_(previewText)}</Preview>
 
         <Section className="bg-background text-muted-foreground">

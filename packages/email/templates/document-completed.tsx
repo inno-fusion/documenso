@@ -1,11 +1,11 @@
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
-import { Body, Container, Head, Html, Img, Preview, Section } from '../components';
-import { useBranding } from '../providers/branding';
+
+import { Body, Container, Head, Html, Preview, Section } from '../components';
+import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
 import type { TemplateDocumentCompletedProps } from '../template-components/template-document-completed';
 import { TemplateDocumentCompleted } from '../template-components/template-document-completed';
 import { TemplateFooter } from '../template-components/template-footer';
-import { getEmailAssetUrl } from '../utils/asset-url';
 
 export type DocumentCompletedEmailTemplateProps = Partial<TemplateDocumentCompletedProps> & {
   customBody?: string;
@@ -20,28 +20,19 @@ export const DocumentCompletedEmailTemplate = ({
   reportUrl,
 }: DocumentCompletedEmailTemplateProps) => {
   const { _ } = useLingui();
-  const branding = useBranding();
 
   const previewText = msg`Completed Document`;
-
-  const getAssetUrl = (path: string) => {
-    return getEmailAssetUrl(assetBaseUrl, path);
-  };
 
   return (
     <Html>
       <Head />
-      <Preview>{_(previewText)}</Preview>
+      <Body className="mx-auto my-auto font-sans text-foreground">
+        <Preview>{_(previewText)}</Preview>
 
-      <Body className="mx-auto my-auto font-sans">
-        <Section className="bg-white">
-          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-slate-200 border-solid p-2 backdrop-blur-sm">
+        <Section className="bg-background text-foreground">
+          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid p-2 backdrop-blur-sm">
             <Section className="p-2">
-              {branding.brandingEnabled && branding.brandingLogo ? (
-                <Img src={branding.brandingLogo} alt="Branding Logo" className="mb-4 h-6" />
-              ) : (
-                <Img src={getAssetUrl('/static/logo.png')} alt="0xMetaLabs Logo" className="mb-4 h-6" />
-              )}
+              <TemplateBrandingLogo assetBaseUrl={assetBaseUrl} className="mb-4 h-6" />
 
               <TemplateDocumentCompleted
                 downloadLink={downloadLink}

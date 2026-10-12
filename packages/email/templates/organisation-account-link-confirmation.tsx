@@ -30,10 +30,10 @@ export const OrganisationAccountLinkConfirmationTemplate = ({
   return (
     <Html>
       <Head />
-      <Body className="mx-auto my-auto font-sans">
+      <Body className="mx-auto my-auto font-sans text-foreground">
         <Preview>{_(previewText)}</Preview>
 
-        <Section className="bg-background">
+        <Section className="bg-background text-foreground">
           <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid px-2 pt-2 backdrop-blur-sm">
             <TemplateBrandingLogo assetBaseUrl={assetBaseUrl} className="mb-4 h-6 p-2" />
 
@@ -58,8 +58,8 @@ export const OrganisationAccountLinkConfirmationTemplate = ({
                   </Trans>
                 ) : (
                   <Trans>
-                    <span className="font-bold">{organisationName}</span> has requested to link your
-                    current 0xMetaLabs account to their organisation.
+                    <span className="font-bold">{organisationName}</span> has requested to link your current 0xMetaLabs
+                    account to their organisation.
                   </Trans>
                 )}
               </Text>
@@ -88,7 +88,7 @@ export const OrganisationAccountLinkConfirmationTemplate = ({
                 <Text className="mt-2 text-sm">
                   <Trans>
                     You can unlink your account at any time in your security settings on 0xMetaLabs{' '}
-                    <Link href={`${assetBaseUrl}/settings/security/linked-accounts`}>here.</Link>
+                    <Link className="text-primary" href={`${assetBaseUrl}/settings/security/linked-accounts`}>here.</Link>
                   </Trans>
                 </Text>
               </Section> */}

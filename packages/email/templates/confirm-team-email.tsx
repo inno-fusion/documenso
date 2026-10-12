@@ -30,10 +30,10 @@ export const ConfirmTeamEmailTemplate = ({
   return (
     <Html>
       <Head />
-      <Body className="mx-auto my-auto font-sans">
+      <Body className="mx-auto my-auto font-sans text-foreground">
         <Preview>{_(previewText)}</Preview>
 
-        <Section className="bg-background">
+        <Section className="bg-background text-foreground">
           <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid px-2 pt-2 backdrop-blur-sm">
             <TemplateBrandingLogo assetBaseUrl={assetBaseUrl} className="mb-4 h-6 p-2" />
 
@@ -48,8 +48,8 @@ export const ConfirmTeamEmailTemplate = ({
 
               <Text className="text-center text-base">
                 <Trans>
-                  <span className="font-bold">{teamName}</span> has requested to use your email
-                  address for their team on 0xMetaLabs.
+                  <span className="font-bold">{teamName}</span> has requested to use your email address for their team
+                  on 0xMetaLabs.
                 </Trans>
               </Text>
 
@@ -79,7 +79,10 @@ export const ConfirmTeamEmailTemplate = ({
                 <Text className="mt-2 text-sm">
                   <Trans>
                     You can revoke access at any time in your team settings on 0xMetaLabs{' '}
-                    <Link href={`${baseUrl}/settings/teams`}>here</Link>.
+                    <Link className="text-primary" href={`${baseUrl}/settings/teams`}>
+                      here
+                    </Link>
+                    .
                   </Trans>
                 </Text>
               </Section>

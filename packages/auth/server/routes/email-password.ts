@@ -30,8 +30,7 @@ import { forgotPassword } from '@documenso/lib/server-only/user/forgot-password'
 import { getMostRecentEmailVerificationToken } from '@documenso/lib/server-only/user/get-most-recent-email-verification-token';
 import { getUserByResetToken } from '@documenso/lib/server-only/user/get-user-by-reset-token';
 import { resetPassword } from '@documenso/lib/server-only/user/reset-password';
-import { deletedServiceAccountEmail } from '@documenso/lib/server-only/user/service-accounts/deleted-account';
-import { legacyServiceAccountEmail } from '@documenso/lib/server-only/user/service-accounts/legacy-service-account';
+import { isServiceAccountEmail } from '@documenso/lib/server-only/user/service-accounts/protected-service-account';
 import { updatePassword } from '@documenso/lib/server-only/user/update-password';
 import { verifyEmail } from '@documenso/lib/server-only/user/verify-email';
 import { prisma } from '@documenso/prisma';
@@ -101,7 +100,7 @@ export const emailPasswordRoute = new Hono<HonoAuthContext>()
       ipAddress: requestMetadata.ipAddress,
     });
 
-    if (email.toLowerCase() === legacyServiceAccountEmail() || email.toLowerCase() === deletedServiceAccountEmail()) {
+    if (isServiceAccountEmail(email)) {
       return c.text('FORBIDDEN', 403);
     }
 
@@ -199,6 +198,10 @@ export const emailPasswordRoute = new Hono<HonoAuthContext>()
     }
 
     const { name, email, password, signature, captchaToken } = c.req.valid('json');
+
+    if (isServiceAccountEmail(email)) {
+      return c.text('FORBIDDEN', 403);
+    }
 
     const signupLimitResult = await signupRateLimit.check({
       ip: requestMetadata.ipAddress ?? 'unknown',
@@ -396,7 +399,7 @@ export const emailPasswordRoute = new Hono<HonoAuthContext>()
       });
     }
 
-    if (email.toLowerCase() === legacyServiceAccountEmail() || email.toLowerCase() === deletedServiceAccountEmail()) {
+    if (isServiceAccountEmail(email)) {
       return c.text('FORBIDDEN', 403);
     }
 
@@ -435,10 +438,7 @@ export const emailPasswordRoute = new Hono<HonoAuthContext>()
 
     const user = await getUserByResetToken({ token });
 
-    if (
-      user.email.toLowerCase() === legacyServiceAccountEmail() ||
-      user.email.toLowerCase() === deletedServiceAccountEmail()
-    ) {
+    if (isServiceAccountEmail(user.email)) {
       return c.text('FORBIDDEN', 403);
     }
 

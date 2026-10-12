@@ -8,8 +8,7 @@ import { formatEmbedAuthCompletePageUrl } from '@documenso/lib/constants/embed-a
 import { AppError, AppErrorCode } from '@documenso/lib/errors/app-error';
 import { getEmailBlocklistDomains } from '@documenso/lib/server-only/site-settings/get-email-blocklist-domains';
 import { onCreateUserHook } from '@documenso/lib/server-only/user/create-user';
-import { deletedServiceAccountEmail } from '@documenso/lib/server-only/user/service-accounts/deleted-account';
-import { legacyServiceAccountEmail } from '@documenso/lib/server-only/user/service-accounts/legacy-service-account';
+import { isServiceAccountEmail } from '@documenso/lib/server-only/user/service-accounts/protected-service-account';
 import { isValidReturnTo, normalizeReturnTo } from '@documenso/lib/utils/is-valid-return-to';
 import { logger } from '@documenso/lib/utils/logger';
 import { prisma } from '@documenso/prisma';
@@ -76,7 +75,7 @@ const handleOAuthCallback = async (options: HandleOAuthCallbackUrlOptions) => {
     clientOptions,
   });
 
-  if (email.toLowerCase() === legacyServiceAccountEmail() || email.toLowerCase() === deletedServiceAccountEmail()) {
+  if (isServiceAccountEmail(email)) {
     const isEmbedFlow = await failEmbedAuthFlow(c, c.req.query('state'), 'service_account');
 
     if (isEmbedFlow) {

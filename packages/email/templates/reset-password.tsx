@@ -2,12 +2,12 @@ import type { TPasswordChangeSource } from '@documenso/lib/jobs/definitions/emai
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
-import { Body, Container, Head, Hr, Html, Img, Link, Preview, Section, Text } from '../components';
-import { useBranding } from '../providers/branding';
+
+import { Body, Container, Head, Hr, Html, Link, Preview, Section, Text } from '../components';
+import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
 import { TemplateFooter } from '../template-components/template-footer';
 import type { TemplateResetPasswordProps } from '../template-components/template-reset-password';
 import { TemplateResetPassword } from '../template-components/template-reset-password';
-import { getEmailAssetUrl } from '../utils/asset-url';
 
 export type ResetPasswordTemplateProps = Partial<TemplateResetPasswordProps> & {
   source?: TPasswordChangeSource;
@@ -20,28 +20,20 @@ export const ResetPasswordTemplate = ({
   source = 'RESET',
 }: ResetPasswordTemplateProps) => {
   const { _ } = useLingui();
-  const branding = useBranding();
 
   const previewText = source === 'RESET' ? msg`Password Reset Successful` : msg`Your password was changed`;
-
-  const getAssetUrl = (path: string) => {
-    return getEmailAssetUrl(assetBaseUrl, path);
-  };
 
   return (
     <Html>
       <Head />
-      <Preview>{_(previewText)}</Preview>
 
-      <Body className="mx-auto my-auto bg-white font-sans">
+      <Body className="mx-auto my-auto bg-background font-sans text-foreground">
+        <Preview>{_(previewText)}</Preview>
+
         <Section>
-          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-slate-200 border-solid p-4 backdrop-blur-sm">
+          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid p-4 backdrop-blur-sm">
             <Section>
-              {branding.brandingEnabled && branding.brandingLogo ? (
-                <Img src={branding.brandingLogo} alt="Branding Logo" className="mb-4 h-6" />
-              ) : (
-                <Img src={getAssetUrl('/static/logo.png')} alt="0xMetaLabs Logo" className="mb-4 h-6" />
-              )}
+              <TemplateBrandingLogo assetBaseUrl={assetBaseUrl} className="mb-4 h-6" />
 
               <TemplateResetPassword userName={userName} userEmail={userEmail} assetBaseUrl={assetBaseUrl} />
             </Section>
@@ -52,7 +44,7 @@ export const ResetPasswordTemplate = ({
               <Text className="my-4 font-semibold text-base">
                 <Trans>
                   Hi, {userName}{' '}
-                  <Link className="font-normal text-slate-400" href={`mailto:${userEmail}`}>
+                  <Link className="font-normal text-muted-foreground" href={`mailto:${userEmail}`}>
                     ({userEmail})
                   </Link>
                 </Trans>

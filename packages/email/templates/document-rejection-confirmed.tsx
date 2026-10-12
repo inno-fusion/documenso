@@ -1,10 +1,10 @@
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
-import { Body, Container, Head, Html, Img, Preview, Section } from '../components';
-import { useBranding } from '../providers/branding';
+
+import { Body, Container, Head, Html, Preview, Section } from '../components';
+import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
 import { TemplateDocumentRejectionConfirmed } from '../template-components/template-document-rejection-confirmed';
 import { TemplateFooter } from '../template-components/template-footer';
-import { getEmailAssetUrl } from '../utils/asset-url';
 
 export type DocumentRejectionConfirmedEmailProps = {
   recipientName: string;
@@ -22,28 +22,20 @@ export function DocumentRejectionConfirmedEmail({
   assetBaseUrl = 'http://localhost:3002',
 }: DocumentRejectionConfirmedEmailProps) {
   const { _ } = useLingui();
-  const branding = useBranding();
 
   const previewText = _(msg`You have rejected the document '${documentName}'`);
-
-  const getAssetUrl = (path: string) => {
-    return getEmailAssetUrl(assetBaseUrl, path);
-  };
 
   return (
     <Html>
       <Head />
-      <Preview>{previewText}</Preview>
 
-      <Body className="mx-auto my-auto bg-white font-sans">
+      <Body className="mx-auto my-auto bg-background font-sans text-foreground">
+        <Preview>{previewText}</Preview>
+
         <Section>
-          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-slate-200 border-solid p-4 backdrop-blur-sm">
+          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid p-4 backdrop-blur-sm">
             <Section>
-              {branding.brandingEnabled && branding.brandingLogo ? (
-                <Img src={branding.brandingLogo} alt="Branding Logo" className="mb-4 h-6" />
-              ) : (
-                <Img src={getAssetUrl('/static/logo.png')} alt="0xMetaLabs Logo" className="mb-4 h-6" />
-              )}
+              <TemplateBrandingLogo assetBaseUrl={assetBaseUrl} className="mb-4 h-6" />
 
               <TemplateDocumentRejectionConfirmed
                 recipientName={recipientName}

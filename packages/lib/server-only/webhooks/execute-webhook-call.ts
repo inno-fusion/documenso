@@ -37,6 +37,8 @@ export const executeWebhookCall = async (options: {
       timeoutMs: WEBHOOK_TIMEOUT_MS,
       headers: {
         'Content-Type': 'application/json',
+        // Keep the documented protocol header and the fork's existing alias.
+        'X-Documenso-Secret': secret ?? '',
         'X-0xMetaLabs-Secret': secret ?? '',
       },
     });

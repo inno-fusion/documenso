@@ -35,7 +35,7 @@ export const TemplateBrandingLogo = ({ assetBaseUrl, className = 'mb-4 h-6' }: T
   }
 
   return (
-    <Link href={safeBrandingUrl} target="_blank">
+    <Link className="text-primary" href={safeBrandingUrl} target="_blank">
       {brandingLogo}
     </Link>
   );

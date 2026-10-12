@@ -18,7 +18,7 @@ export const AdminUserCreatedTemplate = ({
   return (
     <Html>
       <Head />
-      <Body className="mx-auto my-auto bg-background font-sans">
+      <Body className="mx-auto my-auto bg-background font-sans text-foreground">
         <Preview>{_(previewText)}</Preview>
 
         <Section>

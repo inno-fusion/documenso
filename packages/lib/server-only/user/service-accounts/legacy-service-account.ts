@@ -1,6 +1,10 @@
 import { prisma } from '@documenso/prisma';
 
 const LEGACY_SERVICE_ACCOUNT_EMAIL = 'serviceaccount@documenso.com';
+export const HISTORICAL_SERVICE_ACCOUNT_EMAILS = [
+  LEGACY_SERVICE_ACCOUNT_EMAIL,
+  'serviceaccount@0xmetalabs.com',
+] as const;
 
 export const legacyServiceAccountEmail = () => {
   try {
@@ -13,22 +17,43 @@ export const legacyServiceAccountEmail = () => {
     const { hostname } = new URL(process.env.NEXT_PUBLIC_WEBAPP_URL || 'http://localhost:3000');
 
     return `serviceaccount@${hostname}`;
-  } catch (error) {
+  } catch {
     return LEGACY_SERVICE_ACCOUNT_EMAIL;
   }
 };
 
 export const migrateLegacyServiceAccount = async () => {
-  if (legacyServiceAccountEmail() !== LEGACY_SERVICE_ACCOUNT_EMAIL) {
-    console.log(`Migrating legacy service account to new email: ${legacyServiceAccountEmail()}`);
+  const targetEmail = legacyServiceAccountEmail();
+  const targetAccount = await prisma.user.findUnique({ where: { email: targetEmail }, select: { id: true } });
 
+  if (targetAccount) {
+    return;
+  }
+
+  const historicalAccounts = await prisma.user.findMany({
+    where: { email: { in: [...HISTORICAL_SERVICE_ACCOUNT_EMAILS] } },
+    select: { id: true, email: true },
+  });
+
+  // Never merge account identities; every historical alias remains blocked by auth.
+  if (historicalAccounts.length !== 1) {
+    return;
+  }
+
+  const account = historicalAccounts[0];
+  try {
     await prisma.user.updateMany({
-      where: {
-        email: LEGACY_SERVICE_ACCOUNT_EMAIL,
-      },
-      data: {
-        email: legacyServiceAccountEmail(),
-      },
+      where: { id: account.id, email: account.email },
+      data: { email: targetEmail },
     });
+  } catch (error) {
+    // Another startup may have claimed the target after the initial lookup.
+    if (typeof error === 'object' && error !== null && 'code' in error && error.code === 'P2002') {
+      const concurrentTarget = await prisma.user.findUnique({ where: { email: targetEmail }, select: { id: true } });
+      if (concurrentTarget) {
+        return;
+      }
+    }
+    throw error;
   }
 };
