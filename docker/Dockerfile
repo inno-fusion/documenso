@@ -1,11 +1,13 @@
 ###########################
 #     BASE CONTAINER      #
 ###########################
-FROM node:24-alpine3.23 AS base
+FROM node:24.21.0-alpine3.23@sha256:9ec4a2e289874ed0d722e1772ec2de45d2801541db8612f3638b26f128c69ac2 AS base
 
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true
 ENV PUPPETEER_SKIP_DOWNLOAD=true
 ENV CYPRESS_INSTALL_BINARY=0
+ENV TURBO_TELEMETRY_DISABLED=1
+ENV DOCUMENSO_DISABLE_TELEMETRY=true
 
 RUN apk add --no-cache openssl
 RUN apk add --no-cache font-freefont

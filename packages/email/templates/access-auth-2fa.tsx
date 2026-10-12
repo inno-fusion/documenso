@@ -1,10 +1,10 @@
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
-
 import { Body, Container, Head, Html, Img, Preview, Section } from '../components';
 import { useBranding } from '../providers/branding';
 import { TemplateAccessAuth2FA } from '../template-components/template-access-auth-2fa';
 import { TemplateFooter } from '../template-components/template-footer';
+import { getEmailAssetUrl } from '../utils/asset-url';
 
 export type AccessAuth2FAEmailTemplateProps = {
   documentTitle: string;
@@ -30,7 +30,7 @@ export const AccessAuth2FAEmailTemplate = ({
   const previewText = msg`Your verification code is ${code}`;
 
   const getAssetUrl = (path: string) => {
-    return new URL(path, assetBaseUrl).toString();
+    return getEmailAssetUrl(assetBaseUrl, path);
   };
 
   return (
@@ -45,11 +45,7 @@ export const AccessAuth2FAEmailTemplate = ({
               {branding.brandingEnabled && branding.brandingLogo ? (
                 <Img src={branding.brandingLogo} alt="Branding Logo" className="mb-4 h-6" />
               ) : (
-                <Img
-                  src={getAssetUrl('/static/logo.png')}
-                  alt="0xMetaLabs Logo"
-                  className="mb-4 h-6"
-                />
+                <Img src={getAssetUrl('/static/logo.png')} alt="0xMetaLabs Logo" className="mb-4 h-6" />
               )}
 
               <TemplateAccessAuth2FA

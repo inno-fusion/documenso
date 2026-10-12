@@ -1,11 +1,11 @@
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
-
 import { Body, Container, Head, Html, Img, Preview, Section } from '../components';
 import { useBranding } from '../providers/branding';
 import type { TemplateDocumentPendingProps } from '../template-components/template-document-pending';
 import { TemplateDocumentPending } from '../template-components/template-document-pending';
 import { TemplateFooter } from '../template-components/template-footer';
+import { getEmailAssetUrl } from '../utils/asset-url';
 
 export type DocumentPendingEmailTemplateProps = Partial<TemplateDocumentPendingProps>;
 
@@ -19,7 +19,7 @@ export const DocumentPendingEmailTemplate = ({
   const previewText = msg`Pending Document`;
 
   const getAssetUrl = (path: string) => {
-    return new URL(path, assetBaseUrl).toString();
+    return getEmailAssetUrl(assetBaseUrl, path);
   };
 
   return (
@@ -34,11 +34,7 @@ export const DocumentPendingEmailTemplate = ({
               {branding.brandingEnabled && branding.brandingLogo ? (
                 <Img src={branding.brandingLogo} alt="Branding Logo" className="mb-4 h-6" />
               ) : (
-                <Img
-                  src={getAssetUrl('/static/logo.png')}
-                  alt="0xMetaLabs Logo"
-                  className="mb-4 h-6"
-                />
+                <Img src={getAssetUrl('/static/logo.png')} alt="0xMetaLabs Logo" className="mb-4 h-6" />
               )}
 
               <TemplateDocumentPending documentName={documentName} assetBaseUrl={assetBaseUrl} />

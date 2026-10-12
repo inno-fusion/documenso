@@ -2,12 +2,12 @@ import { RECIPIENT_ROLES_DESCRIPTION } from '@documenso/lib/constants/recipient-
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { RecipientRole } from '@prisma/client';
-
 import { Body, Container, Head, Hr, Html, Img, Preview, Section, Text } from '../components';
 import { useBranding } from '../providers/branding';
 import { TemplateCustomMessageBody } from '../template-components/template-custom-message-body';
 import { TemplateDocumentReminder } from '../template-components/template-document-reminder';
 import { TemplateFooter } from '../template-components/template-footer';
+import { getEmailAssetUrl } from '../utils/asset-url';
 
 export type DocumentReminderEmailTemplateProps = {
   recipientName: string;
@@ -36,7 +36,7 @@ export const DocumentReminderEmailTemplate = ({
   const previewText = msg`Reminder to ${action} ${documentName}`;
 
   const getAssetUrl = (path: string) => {
-    return new URL(path, assetBaseUrl).toString();
+    return getEmailAssetUrl(assetBaseUrl, path);
   };
 
   return (

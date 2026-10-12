@@ -1,11 +1,11 @@
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
-
 import { Body, Container, Head, Html, Img, Preview, Section } from '../components';
 import { useBranding } from '../providers/branding';
 import { TemplateFooter } from '../template-components/template-footer';
 import type { TemplateForgotPasswordProps } from '../template-components/template-forgot-password';
 import { TemplateForgotPassword } from '../template-components/template-forgot-password';
+import { getEmailAssetUrl } from '../utils/asset-url';
 
 export type ForgotPasswordTemplateProps = Partial<TemplateForgotPasswordProps>;
 
@@ -19,7 +19,7 @@ export const ForgotPasswordTemplate = ({
   const previewText = msg`Password Reset Requested`;
 
   const getAssetUrl = (path: string) => {
-    return new URL(path, assetBaseUrl).toString();
+    return getEmailAssetUrl(assetBaseUrl, path);
   };
 
   return (
@@ -34,11 +34,7 @@ export const ForgotPasswordTemplate = ({
               {branding.brandingEnabled && branding.brandingLogo ? (
                 <Img src={branding.brandingLogo} alt="Branding Logo" className="mb-4 h-6" />
               ) : (
-                <Img
-                  src={getAssetUrl('/static/logo.png')}
-                  alt="0xMetaLabs Logo"
-                  className="mb-4 h-6"
-                />
+                <Img src={getAssetUrl('/static/logo.png')} alt="0xMetaLabs Logo" className="mb-4 h-6" />
               )}
 
               <TemplateForgotPassword resetPasswordLink={resetPasswordLink} assetBaseUrl={assetBaseUrl} />

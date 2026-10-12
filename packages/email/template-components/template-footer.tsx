@@ -29,7 +29,7 @@ export const TemplateFooter = ({ isDocument = true, reportUrl }: TemplateFooterP
         <Text className="my-4 text-base text-slate-400">
           <Trans>
             This document was sent using{' '}
-            <Link className="text-[#7AC455]" href="https://documen.so/mail-footer">
+            <Link className="text-[#7AC455]" href="https://dochub.ngx.0xmetalabs.com">
               0xDocHub by 0xMetaLabs.
             </Link>
             .

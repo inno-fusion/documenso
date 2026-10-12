@@ -1,11 +1,11 @@
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
-
 import { Body, Container, Head, Hr, Html, Img, Preview, Section } from '../components';
 import { useBranding } from '../providers/branding';
 import { TemplateFooter } from '../template-components/template-footer';
 import type { TemplateRecipientExpiredProps } from '../template-components/template-recipient-expired';
 import { TemplateRecipientExpired } from '../template-components/template-recipient-expired';
+import { getEmailAssetUrl } from '../utils/asset-url';
 
 export type RecipientExpiredEmailTemplateProps = Partial<TemplateRecipientExpiredProps>;
 
@@ -22,7 +22,7 @@ export const RecipientExpiredTemplate = ({
   const previewText = msg`The signing window for "${recipientName}" on document "${documentName}" has expired.`;
 
   const getAssetUrl = (path: string) => {
-    return new URL(path, assetBaseUrl).toString();
+    return getEmailAssetUrl(assetBaseUrl, path);
   };
 
   return (

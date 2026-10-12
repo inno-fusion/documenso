@@ -2,12 +2,12 @@ import type { TPasswordChangeSource } from '@documenso/lib/jobs/definitions/emai
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
-
 import { Body, Container, Head, Hr, Html, Img, Link, Preview, Section, Text } from '../components';
 import { useBranding } from '../providers/branding';
 import { TemplateFooter } from '../template-components/template-footer';
 import type { TemplateResetPasswordProps } from '../template-components/template-reset-password';
 import { TemplateResetPassword } from '../template-components/template-reset-password';
+import { getEmailAssetUrl } from '../utils/asset-url';
 
 export type ResetPasswordTemplateProps = Partial<TemplateResetPasswordProps> & {
   source?: TPasswordChangeSource;
@@ -25,7 +25,7 @@ export const ResetPasswordTemplate = ({
   const previewText = source === 'RESET' ? msg`Password Reset Successful` : msg`Your password was changed`;
 
   const getAssetUrl = (path: string) => {
-    return new URL(path, assetBaseUrl).toString();
+    return getEmailAssetUrl(assetBaseUrl, path);
   };
 
   return (
@@ -40,11 +40,7 @@ export const ResetPasswordTemplate = ({
               {branding.brandingEnabled && branding.brandingLogo ? (
                 <Img src={branding.brandingLogo} alt="Branding Logo" className="mb-4 h-6" />
               ) : (
-                <Img
-                  src={getAssetUrl('/static/logo.png')}
-                  alt="0xMetaLabs Logo"
-                  className="mb-4 h-6"
-                />
+                <Img src={getAssetUrl('/static/logo.png')} alt="0xMetaLabs Logo" className="mb-4 h-6" />
               )}
 
               <TemplateResetPassword userName={userName} userEmail={userEmail} assetBaseUrl={assetBaseUrl} />

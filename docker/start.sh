@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -eu
+
 # 🚀 Starting 0xDocHub...
 printf "🚀 Starting 0xDocHub...\n\n"
 
@@ -31,4 +33,4 @@ printf "🗄️  Running database migrations...\n"
 npx prisma migrate deploy --schema ../../packages/prisma/schema.prisma
 
 printf "🌟 Starting 0xDocHub server...\n"
-HOSTNAME=0.0.0.0 node build/server/main.js
+HOSTNAME=0.0.0.0 exec node build/server/main.js
